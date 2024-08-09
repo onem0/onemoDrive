@@ -2,4 +2,5 @@
 <template>
   <HeaderComponent />
   <DriveMainViewComponent />
+  <DriveFilesComponent />
 </template>

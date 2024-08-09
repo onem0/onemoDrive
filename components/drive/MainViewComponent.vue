@@ -1,9 +1,9 @@
 <template>
     <div>
-        <p>EEEE</p>
+        
     </div>
 </template>
-<script>
+<script setup>
 import Cookies from "js-cookie";
 
 onMounted(() => {

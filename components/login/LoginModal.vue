@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 import { login, checkToken } from "@/scripts/login/script.js";
-import Cookies from "js-cookie";
 
 const email = ref("");
 const password = ref("");
