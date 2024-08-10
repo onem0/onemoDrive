@@ -1,9 +1,11 @@
-let openModal = false
+import { ref } from 'vue';
+
+let openModal = ref(false);
 
 export function changeModal(state) {
-    openModal = state
+    openModal.value = state;
 }
 
 export function checkModalState() {
-    return openModal
+    return openModal.value;
 }

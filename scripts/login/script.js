@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { changeMessage } from '@/scripts/accountManagement/sendNotification.js'
 
 export function login(email, password) {
   const url = "https://login.onemo.dev/login";
@@ -11,7 +12,7 @@ export function login(email, password) {
     })
     .then((response) => {
       if (response.data.content === "Wrong Email or password.") {
-        alert("Wrong email or password");
+        changeMessage(true, "Wrong Credentials", "Check your email and password")
       } else {
         Cookies.set("token", response.data.token, { expires: 7 });
         window.location = "/";

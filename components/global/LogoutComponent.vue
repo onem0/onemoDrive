@@ -48,8 +48,8 @@
                   >
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Are you sure to sign out? If you sign out, you have to enter
-                      your Email and password again.
+                      Are you sure to sign out? If you sign out, you have to
+                      enter your Email and password again.
                     </p>
                   </div>
                 </div>
@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -89,28 +89,33 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
-import { logout } from '@/scripts/accountManagement/script.js';
-import { checkModalState, changeModal } from '@/scripts/accountManagement/logoutButtonCancel.js'
+import { logout } from "@/scripts/accountManagement/script.js";
+import {
+  checkModalState,
+  changeModal,
+} from "@/scripts/accountManagement/logoutButtonCancel.js";
 
 function logoutFunction() {
-    logout()
-    changeModal(false)
+  logout();
+  changeModal(false);
 }
 
 function cancel() {
-    changeModal(false)
-    checkState()
+  changeModal(false);
+  checkState();
 }
 
 const open = ref(true);
 
-checkState()
+checkState();
 
-setInterval(() => {
-    checkState()
-}, 500)
+watch(checkModalState, (newVal) => {
+  if (newVal) {
+    open.value = newVal
+  }
+});
 
 function checkState() {
-    open.value = checkModalState()
+  open.value = checkModalState();
 }
 </script>

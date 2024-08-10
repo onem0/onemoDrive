@@ -1,6 +1,8 @@
-<script></script>
+<script setup>
+onMounted(() => {
+  window.location.href = "/files"
+})
+</script>
 <template>
-  <HeaderComponent />
-  <DriveMainViewComponent />
-  <DriveFilesComponent />
+  
 </template>

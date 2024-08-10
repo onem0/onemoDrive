@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from "vue";
 import { login, checkToken } from "@/scripts/login/script.js";
+import { checkMessageState, changeMessage } from "@/scripts/accountManagement/sendNotification.js";
 
 const email = ref("");
 const password = ref("");
+
+const wrong = ref(false)
 
 function setInformation(event) {
   if (event.target.id === "email") {
@@ -11,13 +14,23 @@ function setInformation(event) {
   } else {
     password.value = event.target.value;
   }
+
+  changeMessage(false, "", "")
 }
+
+watch(checkMessageState, (newVal) => {
+  wrong.value = newVal.messageState
+
+  console.log(newVal.messageState)
+});
 
 onMounted(() => {
   checkToken().then((result) => {
-    if(result.content) {
-      window.location.href = "/";
-    }
+    try {
+      if (result.content) {
+        window.location.href = "/";
+      }
+    } catch (error) {}
   });
 });
 </script>
@@ -55,6 +68,9 @@ onMounted(() => {
             required
             @input="setInformation"
             class="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-drive-500 sm:text-sm sm:leading-6"
+            :class="{
+              'ring-red-500': wrong
+            }"
           />
         </div>
       </div>
@@ -83,6 +99,9 @@ onMounted(() => {
             required
             @input="setInformation"
             class="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-drive-500 sm:text-sm sm:leading-6"
+            :class="{
+              'ring-red-500': wrong
+            }"
           />
         </div>
       </div>
