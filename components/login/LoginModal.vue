@@ -1,12 +1,17 @@
 <script setup>
 import { ref } from "vue";
 import { login, checkToken } from "@/scripts/login/script.js";
-import { checkMessageState, changeMessage } from "@/scripts/accountManagement/sendNotification.js";
+import {
+  checkMessageState,
+  changeMessage,
+} from "@/scripts/accountManagement/sendNotification.js";
 
 const email = ref("");
 const password = ref("");
 
-const wrong = ref(false)
+const loading = ref(false);
+
+const wrong = ref(false);
 
 function setInformation(event) {
   if (event.target.id === "email") {
@@ -15,13 +20,21 @@ function setInformation(event) {
     password.value = event.target.value;
   }
 
-  changeMessage(false, "", "")
+  changeMessage(false, "", "");
+}
+
+function loginFunction(email, password) {
+  loading.value = true;
+
+  login(email, password).then((result) => {
+    loading.value = false;
+  });
 }
 
 watch(checkMessageState, (newVal) => {
-  wrong.value = newVal.messageState
+  wrong.value = newVal.messageState;
 
-  console.log(newVal.messageState)
+  console.log(newVal.messageState);
 });
 
 onMounted(() => {
@@ -69,7 +82,7 @@ onMounted(() => {
             @input="setInformation"
             class="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-drive-500 sm:text-sm sm:leading-6"
             :class="{
-              'ring-red-500': wrong
+              'ring-red-500': wrong,
             }"
           />
         </div>
@@ -100,7 +113,7 @@ onMounted(() => {
             @input="setInformation"
             class="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-drive-500 sm:text-sm sm:leading-6"
             :class="{
-              'ring-red-500': wrong
+              'ring-red-500': wrong,
             }"
           />
         </div>
@@ -109,10 +122,13 @@ onMounted(() => {
       <div>
         <button
           type="submit"
-          @click="login(email, password)"
-          class="flex w-full mt-5 justify-center rounded-md bg-drive-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-drive-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-drive-500"
+          @click="loginFunction(email, password)"
+          class="flex w-full mt-5 justify-center rounded-md bg-drive-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-drive-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-drive-500 h-10 items-center"
         >
-          Sign in
+          <div v-if="!loading">Sign in</div>
+          <div v-else>
+            <div class="container"></div>
+          </div>
         </button>
       </div>
 
@@ -128,3 +144,54 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style>
+.container {
+  --uib-size: 80px;
+  --uib-color: black;
+  --uib-speed: 1.4s;
+  --uib-stroke: 5px;
+  --uib-bg-opacity: 0.1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--uib-stroke);
+  width: var(--uib-size);
+  border-radius: calc(var(--uib-stroke) / 2);
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--uib-color);
+  opacity: var(--uib-bg-opacity);
+  transition: background-color 0.3s ease;
+}
+
+.container::after {
+  content: "";
+  height: 100%;
+  width: 100%;
+  border-radius: calc(var(--uib-stroke) / 2);
+  animation: zoom var(--uib-speed) ease-in-out infinite;
+  transform: translateX(-100%);
+  background-color: var(--uib-color);
+  transition: background-color 0.3s ease;
+}
+
+@keyframes zoom {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+</style>
