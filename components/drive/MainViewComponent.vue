@@ -5,10 +5,13 @@
 </template>
 <script setup>
 import Cookies from "js-cookie";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 onMounted(() => {
   if(!Cookies.get("token")) {
-    window.location.href = "/login";
+    router.push("/login");
   }
 });
 </script>

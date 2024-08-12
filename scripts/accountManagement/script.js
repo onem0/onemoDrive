@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-export function logout() {
+export async function logout() {
   Cookies.remove("token");
-  window.location = "/";
+  return true;
 }

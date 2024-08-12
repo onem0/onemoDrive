@@ -1,7 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { changeMessage } from '@/scripts/accountManagement/sendNotification.js'
-import router from '@/scripts/router.js'
 
 export function login(email, password) {
   const url = "https://login.onemo.dev/login";
@@ -17,7 +16,6 @@ export function login(email, password) {
         return false;
       } else {
         Cookies.set("token", response.data.token, { expires: 7 });
-        router.push({ name: 'Files' })
         return true
       }
     })

@@ -94,9 +94,16 @@ import {
   checkModalState,
   changeModal,
 } from "@/scripts/accountManagement/logoutButtonCancel.js";
+import { useRouter } from "vue-router";
 
-function logoutFunction() {
-  logout();
+const router = useRouter();
+
+async function logoutFunction() {
+  logout().then((data) => {
+    if(data) {
+      router.push("/")
+    }
+  });
   changeModal(false);
 }
 

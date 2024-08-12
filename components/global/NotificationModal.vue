@@ -55,7 +55,6 @@
 <script setup>
 import { ref, watch } from "vue";
 import { ExclamationCircleIcon } from "@heroicons/vue/24/outline";
-import { XMarkIcon } from "@heroicons/vue/20/solid";
 import { checkMessageState, changeMessage } from "@/scripts/accountManagement/sendNotification.js";
 
 watch(checkMessageState, (newVal) => {

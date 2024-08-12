@@ -5,6 +5,12 @@ import {
   checkMessageState,
   changeMessage,
 } from "@/scripts/accountManagement/sendNotification.js";
+import { useRouter } from "vue-router";
+import { image } from "@/scripts/returnImage.js";
+
+const imageBase64 = ref(image());
+
+const router = useRouter();
 
 const email = ref("");
 const password = ref("");
@@ -27,6 +33,10 @@ function loginFunction(email, password) {
   loading.value = true;
 
   login(email, password).then((result) => {
+    if(result) {
+      router.push("/");
+    }
+
     loading.value = false;
   });
 }
@@ -41,7 +51,7 @@ onMounted(() => {
   checkToken().then((result) => {
     try {
       if (result.content) {
-        window.location.href = "/";
+        router.push("/")
       }
     } catch (error) {}
   });
@@ -55,7 +65,7 @@ onMounted(() => {
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img
         class="mx-auto h-10 w-auto"
-        src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=400"
+        :src="imageBase64"
         alt="Your Company"
       />
       <h2
@@ -136,7 +146,7 @@ onMounted(() => {
         Not a member?
         {{ " " }}
         <a
-          href="#"
+          href="https://www.onemo.dev/register"
           class="font-semibold leading-6 text-drive-500 hover:text-drive-800"
           >Create Account</a
         >
