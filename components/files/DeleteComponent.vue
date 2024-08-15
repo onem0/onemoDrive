@@ -17,7 +17,6 @@ const router = useRouter();
 const token = Cookies.get("token");
 
 const open = ref(false);
-const loading = ref(false)
 
 const props = defineProps({
   file: Object,
@@ -73,14 +72,14 @@ function submitDelete() {
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
-          enter-from="opacity-0"
-          enter-to="opacity-100"
+          enter-from="opacity-0 blur-20"
+          enter-to="opacity-100 blur-0"
           leave="ease-in duration-200"
-          leave-from="opacity-100"
-          leave-to="opacity-0"
+          leave-from="opacity-100 blur-0"
+          leave-to="opacity-0 blur-20" 
         >
           <div
-            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            class="fixed inset-0 bg-opacity-75 backdrop-blur transition-opacity"
           />
         </TransitionChild>
 

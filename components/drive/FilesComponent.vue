@@ -139,7 +139,7 @@ onMounted(() => {
             >
               <div class="text-center">
                 <div>
-                  <div v-if="file.image" class="items-center">
+                  <div v-if="file.image" class="flex align-center items-center justify-center">
                     <img
                       :src="file.base64"
                       v-show="file.loaded"
@@ -160,10 +160,8 @@ onMounted(() => {
                     class="flex align-center items-center justify-center"
                   >
                     <video
-                      class="object-cover rounded-lg"
+                      class="rounded-lg"
                       controls
-                      width="100%"
-                      height="100%"
                       :src="
                         'https://drive.onemo.dev/download/' +
                         path.file +
