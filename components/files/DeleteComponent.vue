@@ -79,7 +79,7 @@ function submitDelete() {
           leave-to="opacity-0 blur-20" 
         >
           <div
-            class="fixed inset-0 bg-opacity-75 backdrop-blur transition-opacity"
+            class="fixed inset-0 backdrop-blur transition-opacity"
           />
         </TransitionChild>
 
