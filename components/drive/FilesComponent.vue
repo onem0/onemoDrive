@@ -142,18 +142,20 @@ onMounted(() => {
               <div class="text-center">
                 <div>
                   <div v-if="file.image" class="items-center">
-                    <img
-                      :src="file.base64"
-                      v-show="file.loaded"
-                      class="object-cover rounded-lg"
-                      @load="file.loaded = true"
-                    />
+                    <div class="flex align-center items-center justify-center">
+                      <img
+                        :src="file.base64"
+                        v-show="file.loaded"
+                        class="object-cover rounded-lg"
+                        @load="file.loaded = true"
+                      />
+                    </div>
                     <div
                       v-if="!file.loaded"
                       class="flex align-center items-center justify-center"
                     >
                       <div
-                        class="h-40 w-full object-cover rounded-lg bg-gray-300 loader"
+                        class="h-40 w-full object-cover rounded-lg loader"
                       ></div>
                     </div>
                   </div>
