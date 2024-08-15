@@ -43,8 +43,6 @@ function loginFunction(email, password) {
 
 watch(checkMessageState, (newVal) => {
   wrong.value = newVal.messageState;
-
-  console.log(newVal.messageState);
 });
 
 onMounted(() => {
@@ -105,13 +103,6 @@ onMounted(() => {
             class="block text-sm font-medium leading-6 text-gray-900"
             >Password</label
           >
-          <!-- <div class="text-sm">
-            <a
-              href=""
-              class="font-semibold text-drive-500 hover:text-drive-800"
-              >Forgot password?</a
-            >
-          </div> -->
         </div>
         <div class="mt-2">
           <input

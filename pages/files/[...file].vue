@@ -7,8 +7,6 @@ let fileString = "/"
 for (let i = 0; i < file.length; i++) {
   fileString += file[i] + "/"
 }
-
-console.log(fileString)
 </script>
 
 <template>

@@ -61,8 +61,6 @@ watch(checkMessageState, (newVal) => {
   show.value = newVal.messageState;
   title.value = newVal.messageTitle
   description.value = newVal.messageContent
-
-  console.log(show.value)
 });
 
 function closeMessage() {
