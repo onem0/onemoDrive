@@ -20,6 +20,10 @@ function open(file) {
   }
 }
 
+function openImage(file) {
+  window.open("/view/" + path.file + "/" + file.name);
+}
+
 onMounted(() => {
   axios
     .get("https://drive.onemo.dev/getFiles", {
@@ -148,6 +152,7 @@ onMounted(() => {
                         v-show="file.loaded"
                         class="object-cover rounded-lg"
                         @load="file.loaded = true"
+                        @click="openImage(file)"
                       />
                     </div>
                     <div
@@ -164,8 +169,10 @@ onMounted(() => {
                     class="flex align-center items-center justify-center"
                   >
                     <video
-                      class="object-cover rounded-lg w-10"
+                      class="object-cover rounded-lg"
                       controls
+                      height="100%"
+                      width="100%"
                       :src="
                         'https://drive.onemo.dev/download/' +
                         path.file +

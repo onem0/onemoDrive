@@ -2,17 +2,15 @@
 const route = useRoute();
 const file = route.params.file;
 
-let fileString = "/"
+let fileString = "/";
 
 for (let i = 0; i < file.length; i++) {
-  fileString += file[i] + "/"
+  fileString += file[i] + "/";
 }
 </script>
 
 <template>
   <HeaderComponent />
   <DriveMainViewComponent />
-  <DriveFilesComponent
-    :file="fileString"
-  />
+  <DriveFilesComponent :file="fileString" />
 </template>

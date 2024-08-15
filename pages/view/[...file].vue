@@ -1,12 +1,14 @@
-<script>
+<script setup>
 const route = useRoute();
 const file = route.params.file;
 
-onMounted (() =>{
-    console.log(file);
-})
+let fileString = "/";
+
+for (let i = 0; i < file.length; i++) {
+  fileString += file[i] + "/";
+}
 </script>
 
 <template>
-
+  <DriveViewFileComponent :file="fileString" />
 </template>
