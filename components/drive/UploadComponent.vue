@@ -2,15 +2,21 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import { changeModal } from "@/scripts/upload/uploadModal.js";
+import { changeFolderModal } from "@/scripts/upload/createFolder.js";
 
 function openUploadModal() {
   changeModal(true);
+}
+
+function openFolderModal() {
+  changeFolderModal(true);
 }
 </script>
 
 <template>
   <div>
     <UploadModalComponent />
+    <UploadCreateFolderComponent />
     <Menu as="div" class="relative inline-block text-left">
       <div>
         <MenuButton
@@ -47,7 +53,7 @@ function openUploadModal() {
             <MenuItem v-slot="{ active }">
               <button
                 class="block px-4 py-2 text-sm w-full text-gray-700 hover:bg-gray-50 m-0"
-                @click="console.log('O')"
+                @click="openFolderModal"
               >
                 Create a folder
               </button>
