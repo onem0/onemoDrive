@@ -60,7 +60,7 @@
     </div>
     <div class="justify-center gap-x-4 w-full text-center gap-y-2">
       <p class="text-sm leading-6 text-gray-900">
-        This is still a beta. You will share files in the near future. Stay
+        This is still a beta. You will be able to share files in the near future. Stay
         tuned!
       </p>
     </div>
