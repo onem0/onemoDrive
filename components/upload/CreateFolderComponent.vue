@@ -102,6 +102,8 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const path = window.location.pathname.replace("/files", "");
+
 const folderName = ref("");
 
 function closeModal() {
@@ -111,7 +113,7 @@ function closeModal() {
 function uploadFile() {
   axios
     .post(
-      "https://driveapi.onemo.dev/createFolder/" + folderName.value,
+      "https://driveapi.onemo.dev/createFolder/" + path + "/" + folderName.value.replaceAll(" ", "%20"),
       {},
       {
         headers: {
