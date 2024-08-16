@@ -95,6 +95,7 @@ onMounted(() => {
 </script>
 <template>
   <div>
+    <InformationBannerComponent />
     <DriveStructureComponent :path="path" />
     <div class="flex justify-end mr-1 mb-2 mt-2">
       <DriveUploadComponent :path="path" />
