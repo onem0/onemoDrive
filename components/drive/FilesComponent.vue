@@ -16,7 +16,7 @@ const requestFinished = ref(false);
 
 function open(file) {
   if (file.folder) {
-    router.push("/files" + path.file + "/" + file.name + "-folder");
+    router.push("/files" + path.file + file.name + "-folder");
   }
 }
 
@@ -57,7 +57,6 @@ onMounted(() => {
           const url =
             "https://drive.onemo.dev/download/" +
             path.file +
-            "/" +
             response.data.files[i] +
             "?token=" +
             Cookies.get("token") +
@@ -96,6 +95,10 @@ onMounted(() => {
 </script>
 <template>
   <div>
+    <DriveStructureComponent :path="path" />
+    <div class="flex justify-end mr-1 mb-2 mt-2">
+      <DriveUploadComponent :path="path" />
+    </div>
     <div v-if="!error">
       <div
         v-if="!requestFinished"

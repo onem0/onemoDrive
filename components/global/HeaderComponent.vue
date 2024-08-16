@@ -26,21 +26,30 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             <!-- Current: "border-drive-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-            <a
-              href="#"
-              class="inline-flex items-center border-b-2 border-drive-500 px-1 pt-1 text-sm font-medium text-gray-900"
-              >Drive</a
-            >
-            <a
-              href="#"
-              class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-              >Shared</a
-            >
-            <a
-              href="#"
-              class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-              >Overall Stats</a
-            >
+             <RouterLink
+              to="/"
+              class="mt-5 border-b-2"
+              :class="{
+                'border-drive-500 text-gray-900': page.drive,
+                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.drive,
+              }"
+              >Drive</RouterLink>
+            <RouterLink
+              to="/shared"
+              class="mt-5 border-b-2"
+              :class="{
+                'border-drive-500 text-gray-900': page.shared,
+                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.shared,
+              }"
+              >Shared</RouterLink>
+              <RouterLink
+              to="/stats"
+              class="mt-5 border-b-2"
+              :class="{
+                'border-drive-500 text-gray-900': page.stats,
+                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.stats,
+              }"
+              >Your stats</RouterLink>
           </div>
         </div>
         <div
@@ -103,23 +112,20 @@
     <DisclosurePanel class="sm:hidden">
       <div class="space-y-1 pb-4 pt-2">
         <!-- Current: "bg-drive-50 border-drive-500 text-drive-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
-        <DisclosureButton
-          as="a"
-          href="#"
-          class="block border-l-4 border-drive-500 bg-drive-50 py-2 pl-3 pr-4 text-base font-medium text-drive-700"
-          >Drive</DisclosureButton
-        >
-        <DisclosureButton
-          as="a"
-          href="#"
+        <RouterLink
+          to="/"
           class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-          >Shared</DisclosureButton
+          >Drive</RouterLink
         >
-        <DisclosureButton
-          as="a"
-          href="#"
+        <RouterLink
+          to="/shared"
           class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-          >Overall Stats</DisclosureButton
+          >Shared</RouterLink
+        >
+        <RouterLink
+          to="/stats"
+          class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+          >Your stats</RouterLink
         >
       </div>
     </DisclosurePanel>
@@ -143,6 +149,30 @@ import { checkToken } from "@/scripts/login/script.js";
 import { changeModal } from "@/scripts/accountManagement/logoutButtonCancel.js";
 import { useRouter } from "vue-router";
 import { image } from "@/scripts/returnImage.js";
+const route = useRoute();
+
+let path = route.path;
+
+const page = ref({
+  drive: false,
+  shared: false,
+  stats: false,
+});
+
+if (path.startsWith("/files")) {
+  page.value.drive = true;
+  page.value.shared = false;
+  page.value.stats = false;
+} else if (path.startsWith("/shared")) {
+  page.value.drive = false;
+  page.value.shared = true;
+  page.value.stats = false;
+} else if (path.startsWith("/stats")) {
+  page.value.drive = false;
+  page.value.shared = false;
+  page.value.stats = true;
+}
+
 
 const router = useRouter();
 
@@ -154,7 +184,6 @@ const imageBase64 = ref(image());
 function logoutButton() {
   changeModal(true);
 }
-
 onMounted(() => {
   checkToken().then((result) => {
     if (result.content) {

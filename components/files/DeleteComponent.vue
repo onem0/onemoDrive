@@ -29,6 +29,8 @@ function deleteFile() {
 
 function submitDelete() {
 
+  open.value = false;
+
   let url = "https://drive.onemo.dev/delete" + props.path.file + "/"
 
   if(props.file.folder) {
