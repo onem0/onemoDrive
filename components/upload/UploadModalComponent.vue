@@ -146,7 +146,7 @@ function uploadFile() {
     .post("https://drive.onemo.dev/upload", formData, {
       headers: {
         token: Cookie.get("token"),
-        path: window.location.pathname.replace("/files", "") + "/",
+        path: window.location.pathname.replace("/files", "").replaceAll("%20", " ") + "/",
       },
       onUploadProgress: (progressEvent) => {
         uploadInProgress.value = true;
