@@ -8,8 +8,6 @@ const router = useRouter();
 
 const files = ref([]);
 
-const path = defineProps(["file"]);
-
 const error = ref(false);
 
 const requestFinished = ref(false);
@@ -26,66 +24,13 @@ function openImage(file) {
 
 onMounted(() => {
   axios
-    .get("https://driveapi.onemo.dev/getFiles", {
+    .get("https://driveapi.onemo.dev/getShared", {
       headers: {
-        path: path.file,
         token: Cookies.get("token"),
       },
     })
     .then((response) => {
-      response.data.files.sort();
-
       requestFinished.value = true;
-
-      for (let i = 0; i < response.data.files.length; i++) {
-        let folder = false;
-        let image = false;
-        let video = false;
-
-        if (response.data.files[i].includes("-folder")) {
-          folder = true;
-        }
-
-        if (
-          response.data.files[i].includes(".png") ||
-          response.data.files[i].includes(".jpg") ||
-          response.data.files[i].includes(".jpeg") ||
-          response.data.files[i].includes(".gif") ||
-          response.data.files[i].includes(".webp")
-        ) {
-          image = true;
-          const url =
-            "https://driveapi.onemo.dev/download/" +
-            path.file +
-            response.data.files[i] +
-            "?token=" +
-            Cookies.get("token") +
-            "&size=small";
-
-          axios.get(url).then((response) => {
-            files.value[i].base64 = response.data.base64;
-          });
-        }
-
-        if (
-          response.data.files[i].includes(".mp4") ||
-          response.data.files[i].includes(".webm") ||
-          response.data.files[i].includes(".mov") ||
-          response.data.files[i].includes(".avi") ||
-          response.data.files[i].includes(".mkv")
-        ) {
-          video = true;
-        }
-
-        files.value.push({
-          name: response.data.files[i].replace("-folder", ""),
-          folder: folder,
-          image: image,
-          video: video,
-          base64: "",
-          loaded: false,
-        });
-      }
     })
     .catch((e) => {
       requestFinished.value = true;
@@ -94,7 +39,10 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="min-h-screen text-black dark:text-neutral-300">
+  <div v-for="file in files">
+    <p>A</p>
+  </div>
+  <!-- <div class="min-h-screen text-black dark:text-neutral-300">
     <InformationBannerComponent />
     <DriveStructureComponent :path="path" />
     <div class="flex justify-end mr-1 mb-2 mt-2">
@@ -177,14 +125,7 @@ onMounted(() => {
                       controls
                       height="100%"
                       width="100%"
-                      :src="
-                        'https://driveapi.onemo.dev/download/' +
-                        path.file +
-                        '/' +
-                        file.name +
-                        '?token=' +
-                        Cookies.get('token')
-                      "
+                      :src=""
                     />
                   </div>
                   <div
@@ -219,7 +160,7 @@ onMounted(() => {
     <div v-else>
       <Error404Component />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>
