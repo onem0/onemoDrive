@@ -58,7 +58,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8"
+    class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 dark:bg-neutral-800 h-screen"
   >
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img
@@ -67,7 +67,7 @@ onMounted(() => {
         alt="Your Company"
       />
       <h2
-        class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+        class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-neutral-300"
       >
         Sign in to your onemo Drive account
       </h2>
@@ -77,7 +77,7 @@ onMounted(() => {
       <div>
         <label
           for="email"
-          class="block text-sm font-medium leading-6 text-gray-900"
+          class="block text-sm font-medium leading-6 text-gray-900 dark:text-neutral-300"
           >Email address</label
         >
         <div class="mt-2">
@@ -100,7 +100,7 @@ onMounted(() => {
         <div class="flex mt-2 items-center justify-between">
           <label
             for="password"
-            class="block text-sm font-medium leading-6 text-gray-900"
+            class="block text-sm font-medium leading-6 text-gray-900 dark:text-neutral-300"
             >Password</label
           >
         </div>

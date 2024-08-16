@@ -51,7 +51,7 @@
                       type="text"
                       name="file-input"
                       v-model="folderName"
-                      class="block w-full mt-2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      class="block w-full mt-2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-drive-500 focus:border-drive-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-drive-500 dark:focus:border-drive-500"
                     />
                   </div>
                 </div>
@@ -92,28 +92,33 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { FolderIcon } from "@heroicons/vue/24/outline";
-import { checkModalState, changeFolderModal } from "@/scripts/upload/createFolder.js";
+import {
+  checkModalState,
+  changeFolderModal,
+} from "@/scripts/upload/createFolder.js";
 import Cookie from "js-cookie";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const folderName = ref("")
+const folderName = ref("");
 
 function closeModal() {
   changeFolderModal(false);
 }
 
 function uploadFile() {
-  console.log("AMOGUS")
-
   axios
-    .post("https://driveapi.onemo.dev/createFolder/" + folderName.value, {}, {
-      headers: {
-        token: Cookie.get("token"),
-      },
-    })
+    .post(
+      "https://driveapi.onemo.dev/createFolder/" + folderName.value,
+      {},
+      {
+        headers: {
+          token: Cookie.get("token"),
+        },
+      }
+    )
     .then((response) => {
       if (response.data.message === "folder created successfully") {
         changeFolderModal(false);

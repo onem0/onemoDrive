@@ -1,5 +1,5 @@
 <template>
-  <Disclosure as="nav" class="bg-white shadow" v-slot="{ open }">
+  <Disclosure as="nav" class="bg-white shadow text-black dark:bg-neutral-900 dark:text-neutral-300" v-slot="{ open }">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -30,7 +30,7 @@
               to="/"
               class="mt-5 border-b-2"
               :class="{
-                'border-drive-500 text-gray-900': page.drive,
+                'border-drive-500 text-gray-900 dark:text-neutral-300': page.drive,
                 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.drive,
               }"
               >Drive</RouterLink>
@@ -38,7 +38,7 @@
               to="/shared"
               class="mt-5 border-b-2"
               :class="{
-                'border-drive-500 text-gray-900': page.shared,
+                'border-drive-500 text-gray-900 dark:text-gray-600': page.shared,
                 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.shared,
               }"
               >Shared</RouterLink>
@@ -46,7 +46,7 @@
               to="/stats"
               class="mt-5 border-b-2"
               :class="{
-                'border-drive-500 text-gray-900': page.stats,
+                'border-drive-500 text-gray-900 dark:text-gray-600': page.stats,
                 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.stats,
               }"
               >Your stats</RouterLink>
@@ -64,7 +64,7 @@
           <Menu as="div" class="relative ml-3">
             <div v-if="account">
               <MenuButton
-                class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-drive-500 focus:ring-offset-2"
+                class="relative flex rounded-full bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-drive-500 focus:ring-offset-2"
               >
                 <span class="absolute -inset-1.5" />
                 <span class="sr-only">Open user menu</span>

@@ -97,7 +97,7 @@
                 >
                   <div
                     v-if="progress > 0 && progress < 100"
-                    class="bg-drive-600 h-full rounded-lg transition-all ease duration-100"
+                    class="bg-drive-600 h-full rounded-lg transition-all ease duration-500"
                     :style="{ width: `${progress}%` }"
                   ></div>
 

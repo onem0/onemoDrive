@@ -10,7 +10,9 @@ for (let i = 0; i < file.length; i++) {
 </script>
 
 <template>
-  <HeaderComponent />
-  <DriveMainViewComponent />
-  <DriveFilesComponent :file="fileString" />
+  <div class="dark:bg-neutral-900 text-neutral-300">
+    <HeaderComponent />
+    <DriveMainViewComponent />
+    <DriveFilesComponent :file="fileString" />
+  </div>
 </template>
