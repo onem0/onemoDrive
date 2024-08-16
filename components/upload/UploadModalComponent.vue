@@ -86,19 +86,25 @@
               </div>
               <div class="w-full">
                 <div v-if="progress === 0 && uploadInProgress" class="mt-5">
-                    <p class="text-gray-500">Prepairing upload...</p>
-                  </div>
+                  <p class="text-gray-500">Prepairing upload...</p>
+                </div>
+                <div v-if="progress === 100 && uploadInProgress" class="mt-5">
+                  <p class="text-gray-500">Processing Upload</p>
+                </div>
                 <div
                   v-if="uploadInProgress"
                   class="mt-5 w-full bg-gray-100 rounded-lg h-5"
                 >
                   <div
-                    v-if="progress > 0"
+                    v-if="progress > 0 && progress < 100"
                     class="bg-drive-600 h-full rounded-lg transition-all ease duration-100"
                     :style="{ width: `${progress}%` }"
                   ></div>
 
-                  <div v-if="progress === 0" class="h-full rounded bg-gradient-to-r from-gray-100 to-gray-200 animation"></div>
+                  <div
+                    v-if="progress === 0 || progress === 100"
+                    class="h-full rounded bg-gradient-to-r from-gray-100 to-gray-200 animation"
+                  ></div>
                 </div>
               </div>
             </DialogPanel>
@@ -143,10 +149,13 @@ function uploadFile() {
   );
 
   axios
-    .post("https://drive.onemo.dev/upload", formData, {
+    .post("https://driveapi.onemo.dev/upload", formData, {
       headers: {
         token: Cookie.get("token"),
-        path: window.location.pathname.replace("/files", "").replaceAll("%20", " ") + "/",
+        path:
+          window.location.pathname
+            .replace("/files", "")
+            .replaceAll("%20", " ") + "/",
       },
       onUploadProgress: (progressEvent) => {
         uploadInProgress.value = true;
@@ -190,5 +199,5 @@ function uploadFile() {
 
 .animation {
   animation: animation 2s infinite;
-} 
+}
 </style>

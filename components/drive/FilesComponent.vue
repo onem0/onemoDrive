@@ -26,7 +26,7 @@ function openImage(file) {
 
 onMounted(() => {
   axios
-    .get("https://drive.onemo.dev/getFiles", {
+    .get("https://driveapi.onemo.dev/getFiles", {
       headers: {
         path: path.file,
         token: Cookies.get("token"),
@@ -55,7 +55,7 @@ onMounted(() => {
         ) {
           image = true;
           const url =
-            "https://drive.onemo.dev/download/" +
+            "https://driveapi.onemo.dev/download/" +
             path.file +
             response.data.files[i] +
             "?token=" +
@@ -177,7 +177,7 @@ onMounted(() => {
                       height="100%"
                       width="100%"
                       :src="
-                        'https://drive.onemo.dev/download/' +
+                        'https://driveapi.onemo.dev/download/' +
                         path.file +
                         '/' +
                         file.name +

@@ -28,27 +28,25 @@ function deleteFile() {
 }
 
 function submitDelete() {
-
   open.value = false;
 
-  let url = "https://drive.onemo.dev/delete" + props.path.file + "/"
+  let url = "https://driveapi.onemo.dev/delete" + props.path.file + "/";
 
-  if(props.file.folder) {
-    url += props.file.name + "-folder"
+  if (props.file.folder) {
+    url += props.file.name + "-folder";
   } else {
-    url += props.file.name  
+    url += props.file.name;
   }
 
-   
-
-  axios.delete(url, {
-    headers: {
-      token: token
-    }
-  })
-  .then((response) => {
-    router.go()
-  })
+  axios
+    .delete(url, {
+      headers: {
+        token: token,
+      },
+    })
+    .then((response) => {
+      router.go();
+    });
 }
 </script>
 
@@ -78,11 +76,9 @@ function submitDelete() {
           enter-to="opacity-100 blur-0"
           leave="ease-in duration-200"
           leave-from="opacity-100 blur-0"
-          leave-to="opacity-0 blur-20" 
+          leave-to="opacity-0 blur-20"
         >
-          <div
-            class="fixed inset-0 backdrop-blur transition-opacity"
-          />
+          <div class="fixed inset-0 backdrop-blur transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -120,7 +116,8 @@ function submitDelete() {
                       <div class="mt-2">
                         <p class="text-sm text-gray-500">
                           Are you sure to delete "{{ file.name }}"? This folder
-                          will be gone forever or you need to upload all files again.
+                          will be gone forever or you need to upload all files
+                          again.
                         </p>
                       </div>
                     </div>

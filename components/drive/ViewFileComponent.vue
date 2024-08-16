@@ -43,7 +43,7 @@ const path = defineProps(["file"]);
         'opacity-100 blur-none': loaded,
       }"
       :src="
-        'https://drive.onemo.dev/download/' +
+        'https://driveapi.onemo.dev/download/' +
         path.file +
         '?token=' +
         Cookies.get('token')

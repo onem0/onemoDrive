@@ -1,4 +1,8 @@
-<script></script>
+<script setup>
+useHead({
+  title: "onemo Drive",
+});
+</script>
 
 <template>
   <TooltipProvider>

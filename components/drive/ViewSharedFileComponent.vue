@@ -30,7 +30,7 @@ if (
     meta: [
       {
         property: "og:image",
-        content: `https://drive.onemo.dev/download/${path.file}?token=shared`,
+        content: `https://driveapi.onemo.dev/download/${path.file}?token=shared`,
       },
       {
         property: "og:image:width",
@@ -50,8 +50,8 @@ if (
       },
       {
         property: "og:url",
-        content: `https://drive.onemo.dev/sharedFile/${path.file}`,
-      }
+        content: `https://driveapi.onemo.dev/sharedFile/${path.file}`,
+      },
     ],
   });
 } else if (
@@ -113,7 +113,7 @@ watch(
             'opacity-100 blur-none': loaded,
           }"
           :src="
-            'https://drive.onemo.dev/download/' + path.file + '?token=shared'
+            'https://driveapi.onemo.dev/download/' + path.file + '?token=shared'
           "
           @load="loaded = true"
         />
@@ -123,7 +123,7 @@ watch(
           class="max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)] shadow-2xl transition-all duration-long ease rounded-lg"
           controls
           :src="
-            'https://drive.onemo.dev/download/' + path.file + '?token=shared'
+            'https://driveapi.onemo.dev/download/' + path.file + '?token=shared'
           "
         />
       </div>
@@ -134,7 +134,9 @@ watch(
         >
           <source
             :src="
-              'https://drive.onemo.dev/download/' + path.file + '?token=shared'
+              'https://driveapi.onemo.dev/download/' +
+              path.file +
+              '?token=shared'
             "
             type="audio/mp3"
           />
@@ -145,7 +147,7 @@ watch(
         <iframe
           class="max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)] shadow-2xl transition-all duration-long ease rounded-lg"
           :src="
-            'https://drive.onemo.dev/download/' + path.file + '?token=shared'
+            'https://driveapi.onemo.dev/download/' + path.file + '?token=shared'
           "
         ></iframe>
       </div>
@@ -171,7 +173,7 @@ watch(
 
               <a
                 :href="
-                  'https://drive.onemo.dev/download/' +
+                  'https://driveapi.onemo.dev/download/' +
                   path.file +
                   '?token=shared'
                 "
