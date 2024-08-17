@@ -189,6 +189,8 @@ onMounted(() => {
     if (result.content) {
       account.value = true;
       username.value = result.username;
+    } else {
+      router.push("/login")
     }
   });
 });

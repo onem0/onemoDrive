@@ -16,13 +16,13 @@ const props = defineProps(["file", "path"]);
 const file = ref(props.file);
 const path = ref(props.path.file);
 
-const shortLink = ref("");
+const link = ref("");
 
 const show = ref(false);
 
 function copyLink() {
-  console.log(shortLink.value);
-  navigator.clipboard.writeText(shortLink.value);
+  console.log(link.value);
+  navigator.clipboard.writeText(link.value);
 }
 
 function startShare() {
@@ -39,9 +39,7 @@ function startShare() {
     )
     .then((response) => {
       show.value = true;
-      shortLink.value = response.data.shortURL;
-
-      console.log(response.data.shortURL);
+      link.value = response.data.fileURL;
     })
     .catch((error) => {
       console.log(error);

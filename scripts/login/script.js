@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { changeMessage } from '@/scripts/accountManagement/sendNotification.js'
+import { changeMessage } from "@/scripts/accountManagement/sendNotification.js";
 
 export function login(email, password) {
   const url = "https://login.onemo.dev/login";
@@ -12,11 +12,15 @@ export function login(email, password) {
     })
     .then((response) => {
       if (response.data.content === "Wrong Email or password.") {
-        changeMessage(true, "Wrong Credentials", "Check your email and password")
+        changeMessage(
+          true,
+          "Wrong Credentials",
+          "Check your email and password"
+        );
         return false;
       } else {
         Cookies.set("token", response.data.token, { expires: 7 });
-        return true
+        return true;
       }
     })
     .catch((error) => {});
@@ -29,9 +33,7 @@ export function checkToken() {
   return axios
     .post(url, { token: token })
     .then((response) => {
-      if (response.data.content) {
-        return response.data;
-      }
+      return response.data;
     })
     .catch((error) => {
       return null;
