@@ -3,4 +3,5 @@
 <template>
   <LoginModal />
   <NotificationModal />
+  <FooterComponent />
 </template>

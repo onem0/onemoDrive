@@ -14,5 +14,6 @@ for (let i = 0; i < file.length; i++) {
     <HeaderComponent />
     <DriveMainViewComponent />
     <DriveFilesComponent :file="fileString" />
+    <FooterComponent />
   </div>
 </template>
