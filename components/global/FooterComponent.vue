@@ -25,6 +25,7 @@ const navigation = {
   main: [
     { name: "Imprint", href: "https://www.onemo.dev/imprint" },
     { name: "Privacy", href: "https://www.onemo.dev/privacy" },
+    { name: "Terms of service", href: "https://www.onemo.dev/tos" },
     { name: "GitHub", href: "https://github.com/onem0/onemoDrive" },
   ],
 };
