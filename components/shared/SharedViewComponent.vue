@@ -2,25 +2,33 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { FolderIcon, DocumentIcon } from "@heroicons/vue/24/outline";
+import { DocumentIcon } from "@heroicons/vue/24/outline";
+import { DateTime } from "luxon";
 
 const router = useRouter();
 
-const files = ref([]);
+const id = ref("");
 
 const error = ref(false);
 
 const requestFinished = ref(false);
 
-function open(file) {
-  if (file.folder) {
-    router.push("/files" + path.file + file.name + "-folder");
-  }
+function open(fileName) {
+  router.push("/sharedFile/" + id.value + "/" + fileName);
 }
 
-function openImage(file) {
-  window.open("/view/" + path.file + "/" + file.name);
+function deleteShared (file) {
+  axios.delete("https://driveapi.onemo.dev/deleteShared/", {
+    headers: {
+      token: Cookies.get("token"),
+      file: file.fullname,
+    },
+  }).then(() => {
+    router.go();
+  });
 }
+
+const files = ref([]);
 
 onMounted(() => {
   axios
@@ -31,6 +39,41 @@ onMounted(() => {
     })
     .then((response) => {
       requestFinished.value = true;
+
+      for (let i = 0; i < response.data.files.length; i++) {
+        const file = response.data.files[i];
+
+        const sharedScince = Number(file.split("-")[0]);
+
+        const relatinveTime = DateTime.fromMillis(sharedScince).toFormat(
+          "MMMM dd, yyyy hh:mm a"
+        );
+
+        const name = file.split("-")[2];
+
+        id.value = response.data.id;
+
+        files.value.push({
+          name: name,
+          sharedScince: relatinveTime,
+          fullname: file,
+          fileUrl:
+            "https://driveapi.onemo.dev/download/" +
+            response.data.id +
+            "/" +
+            file +
+            "?token=shared",
+          image:
+            file.endsWith(".png") ||
+            file.endsWith(".jpg") ||
+            file.endsWith(".jpeg") ||
+            file.endsWith(".webp"),
+          video:
+            file.endsWith(".mp4") ||
+            file.endsWith(".webm") ||
+            file.endsWith(".ogg"),
+        });
+      }
     })
     .catch((e) => {
       requestFinished.value = true;
@@ -39,15 +82,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div v-for="file in files">
-    <p>A</p>
-  </div>
-  <!-- <div class="min-h-screen text-black dark:text-neutral-300">
-    <InformationBannerComponent />
-    <DriveStructureComponent :path="path" />
-    <div class="flex justify-end mr-1 mb-2 mt-2">
-      <DriveUploadComponent :path="path" />
-    </div>
+  <div class="min-h-screen text-black dark:text-neutral-300">
     <div v-if="!error">
       <div
         v-if="!requestFinished"
@@ -100,11 +135,11 @@ onMounted(() => {
                   <div v-if="file.image" class="items-center">
                     <div class="flex align-center items-center justify-center">
                       <img
-                        :src="file.base64"
                         v-show="file.loaded"
                         class="object-cover rounded-lg"
                         @load="file.loaded = true"
                         @click="openImage(file)"
+                        :src="file.fileUrl"
                       />
                     </div>
                     <div
@@ -125,15 +160,8 @@ onMounted(() => {
                       controls
                       height="100%"
                       width="100%"
-                      :src=""
+                      :src="file.fileUrl"
                     />
-                  </div>
-                  <div
-                    v-if="file.folder"
-                    class="flex align-center items-center justify-center"
-                    @click="open(file)"
-                  >
-                    <FolderIcon class="h-12 w-12 text-gray-500 m-2" />
                   </div>
                   <div
                     v-else-if="!file.image && !file.video"
@@ -141,14 +169,25 @@ onMounted(() => {
                   >
                     <DocumentIcon class="h-12 w-12 text-gray-500 m-2" />
                   </div>
-                  <p class="mb-5 mt-4 truncate" @click="open(file)">
+                  <p class="mb-5 mt-4 truncate" @click="open(file.fullname)">
                     {{ file.name }}
                   </p>
                 </div>
                 <div class="flex justify-center">
-                  <FilesDeleteComponent :file="file" :path="path" />
-                  <div v-if="!file.folder">
-                    <FilesShareComponent :file="file" :path="path" />
+                  <div @click="deleteShared(file)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-5"
+                      @click="deleteFile"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -160,7 +199,7 @@ onMounted(() => {
     <div v-else>
       <Error404Component />
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style scoped>
