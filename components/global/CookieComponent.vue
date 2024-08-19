@@ -9,8 +9,6 @@ function acceptCookies() {
 onMounted(() => {
   if (localStorage.getItem("cookiesAccepted") === "true") {
     cookiesAccepted.value = true;
-
-    console.log("Cookies accepted");
   }
 });
 </script>
