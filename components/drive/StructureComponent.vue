@@ -28,7 +28,7 @@ for (let i = 0; i < pathArray.length; i++) {
       <li>
         <div>
           <RouterLink
-            to="/"
+            to="/files"
             class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
             aria-current="page"
           >
