@@ -93,17 +93,17 @@
                 </div>
                 <div
                   v-if="uploadInProgress"
-                  class="mt-5 w-full bg-gray-100 rounded-lg h-5"
+                  class="mt-5 w-full bg-gray-100 overflow-hidden rounded-lg h-5"
                 >
                   <div
                     v-if="progress > 0 && progress < 100"
-                    class="bg-drive-600 h-full rounded-lg transition-all ease duration-500"
+                    class="bg-drive-600 h-full transition-all ease duration-500"
                     :style="{ width: `${progress}%` }"
                   ></div>
 
                   <div
                     v-if="progress === 0 || progress === 100"
-                    class="h-full rounded bg-gradient-to-r from-gray-100 to-gray-200 animation"
+                    class="h-full bg-gray-400 animation"
                   ></div>
                 </div>
               </div>
@@ -142,42 +142,68 @@ function closeModal() {
 }
 
 function uploadFile() {
-  const formData = new FormData();
-  formData.append(
-    "file",
-    document.querySelector('input[type="file"]').files[0]
-  );
+  const file = document.querySelector('input[type="file"]').files[0];
+  const chunkSize = 5 * 1024 * 1024; 
+  const totalChunks = Math.ceil(file.size / chunkSize);
 
-  axios
-    .post("https://driveapi.onemo.dev/upload", formData, {
-      headers: {
-        token: Cookie.get("token"),
-        path:
-          window.location.pathname
-            .replace("/files", "")
-            .replaceAll("%20", " ") + "/",
-      },
-      onUploadProgress: (progressEvent) => {
-        uploadInProgress.value = true;
+  const uploadChunk = async (chunkIndex) => {
+    const start = chunkIndex * chunkSize;
+    const end = Math.min(file.size, start + chunkSize);
 
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
+    const chunk = file.slice(start, end);
+    const formData = new FormData();
+    formData.append("file", chunk);
 
-        progress.value = percentCompleted;
-      },
-    })
-    .then((response) => {
-      if (response.data.message === "file uploaded successfully") {
+    try {
+      const response = await axios.post(
+        "https://driveapi.onemo.dev/upload",
+        formData,
+        {
+          headers: {
+            token: Cookie.get("token"),
+            path:
+              window.location.pathname
+                .replace("/files", "")
+                .replaceAll("%20", " ") + "/",
+            "chunk-index": chunkIndex,
+            "total-chunks": totalChunks,
+            "original-file-name": file.name,
+          },
+          onUploadProgress: (progressEvent) => {
+            uploadInProgress.value = true;
+
+            // Fortschritt des aktuellen Chunks berechnen
+            const chunkProgress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+
+            // Gesamtfortschritt berechnen
+            const percentCompleted = Math.round(
+              ((chunkIndex + chunkProgress / 100) * 100) / totalChunks
+            );
+
+            progress.value = percentCompleted;
+          },
+        }
+      );
+
+      if (
+        chunkIndex === totalChunks - 1 &&
+        response.data.message === "file uploaded and merged successfully"
+      ) {
         changeModal(false);
         router.go();
+      } else if (chunkIndex < totalChunks - 1) {
+        uploadChunk(chunkIndex + 1); // Nächsten Chunk hochladen
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       changeModal(false);
       console.log(error);
       alert("An error occurred while uploading the file.");
-    });
+    }
+  };
+
+  uploadChunk(0); // Upload startet mit dem ersten Chunk
 }
 </script>
 
@@ -189,7 +215,7 @@ function uploadFile() {
   }
   5% {
     width: 0%;
-    opacity: 1;
+    opacity: 0.5;
   }
   100% {
     width: 100%;
