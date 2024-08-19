@@ -27,7 +27,7 @@
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             <!-- Current: "border-drive-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
              <RouterLink
-              to="/"
+              to="/files"
               class="mt-5 border-b-2"
               :class="{
                 'border-drive-500 text-gray-900 dark:text-neutral-300': page.drive,
@@ -113,7 +113,7 @@
       <div class="space-y-1 pb-4 pt-2">
         <!-- Current: "bg-drive-50 border-drive-500 text-drive-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
         <RouterLink
-          to="/"
+          to="/files"
           class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
           >Drive</RouterLink
         >

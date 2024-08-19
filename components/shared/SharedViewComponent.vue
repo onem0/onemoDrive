@@ -180,6 +180,9 @@ onMounted(() => {
                   <p class="mb-5 mt-4 truncate" @click="open(file.fullname)">
                     {{ file.name }}
                   </p>
+                  <p class="mb-5 mt-4 truncate text-neutral-500 text-sm">
+                    shared on {{ file.sharedScince }}
+                  </p>
                 </div>
                 <div class="flex justify-center">
                   <div @click="deleteShared(file)">

@@ -149,7 +149,7 @@ onMounted(() => {
 <style>
 .container {
   --uib-size: 80px;
-  --uib-color: black;
+  --uib-color: white;
   --uib-speed: 1.4s;
   --uib-stroke: 5px;
   --uib-bg-opacity: 0.1;
