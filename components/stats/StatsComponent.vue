@@ -10,6 +10,8 @@ const percentageUsed = ref(0);
 
 const username = ref("");
 
+const allStats = ref([]);
+
 const loaded = ref(false);
 
 onMounted(() => {
@@ -38,6 +40,10 @@ onMounted(() => {
   checkToken().then((result) => {
     username.value = result.username;
   });
+
+  axios.get("https://driveapi.onemo.dev/getStats").then((response) => {
+    allStats.value = response.data;
+  });
 });
 </script>
 
@@ -64,6 +70,14 @@ onMounted(() => {
               </p>
             </div>
           </div>
+        </div>
+        <div class="mt-5">
+          <p class="text-drive-700 dark:text-drive-200">
+            You have used {{ storage }}GB of your {{ driveStorage }}GB storage
+          </p>
+        </div>
+        <div class="mt-8">
+          <h2>All requests: {{ allStats.requests.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</h2>
         </div>
       </div>
     </div>
