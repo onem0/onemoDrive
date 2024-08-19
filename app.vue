@@ -8,6 +8,7 @@ useHead({
   <TooltipProvider>
     <NuxtLayout>
       <NuxtPage />
+      <CookieComponent />
       <TailwindBreakpointIndicator />
     </NuxtLayout>
   </TooltipProvider>

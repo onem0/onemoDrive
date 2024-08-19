@@ -145,7 +145,7 @@ onMounted(() => {
         >
           <div v-for="file in files" :key="file">
             <div
-              class="p-2 m-1 ml-2 sm:ml-1 rounded-xl border shadow-md dark:shadow-neutral-600 w-[calc(100vw-1rem)] items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
+              class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
             >
               <div class="text-center">
                 <div>
