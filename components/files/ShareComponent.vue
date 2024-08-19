@@ -94,7 +94,7 @@ function startShare() {
                     >
                     <div class="mt-2">
                       <p class="text-sm text-gray-500">
-                        {{ file.name }} has been shared.
+                        {{ file.name }} has been shared. You can see your shared files by clicking on the Shared Button in the header.
                       </p>
                     </div>
                     <div class="mt-8">
@@ -127,7 +127,5 @@ function startShare() {
     </TransitionRoot>
 
     <ShareIcon class="h-6 ml-2 w-6" @click="startShare" />
-
-    {{ show }}
   </div>
 </template>
