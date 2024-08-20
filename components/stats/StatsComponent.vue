@@ -3,14 +3,17 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ref } from "vue";
 import { checkToken } from "@/scripts/login/script.js";
+import anime from "animejs/lib/anime.es.js";
 
 const storage = ref(0);
 const driveStorage = ref(0);
 const percentageUsed = ref(0);
 
+const allStats = ref([]);
+
 const username = ref("");
 
-const allStats = ref([]);
+const allRequests = ref({ value: -1000 });
 
 const loaded = ref(false);
 
@@ -43,6 +46,13 @@ onMounted(() => {
 
   axios.get("https://driveapi.onemo.dev/getStats").then((response) => {
     allStats.value = response.data;
+    anime({
+      targets: allRequests.value,
+      value: response.data.requests,
+      easing: "cubicBezier(0,1,0,1)",
+      duration: 2000,
+      round: 1,
+    });
   });
 });
 </script>
@@ -76,8 +86,19 @@ onMounted(() => {
             You have used {{ storage }}GB of your {{ driveStorage }}GB storage
           </p>
         </div>
-        <div class="mt-8">
-          <h2>All requests: {{ allStats.requests.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</h2>
+        <div class="text-3xl mt-8">
+          <h1>Overall stats</h1>
+        </div>
+        <div class="text-left mt-2">
+          <h2>Requests: {{ allRequests.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</h2>
+          <h2>
+            Storage used:
+            {{
+              allStats.stats.storage[allStats.stats.storage.length - 1].toFixed(
+                2
+              )
+            }}GB
+          </h2>
         </div>
       </div>
     </div>
