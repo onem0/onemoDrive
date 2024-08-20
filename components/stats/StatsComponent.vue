@@ -61,21 +61,21 @@ onMounted(() => {
   <div class="min-h-screen dark:text-neutral-300 dark:bg-black">
     <div v-if="loaded">
       <div class="flex pt-5 flex-col items-center justify-center">
-        <h1 class="text-3xl font-bold text-drive-700 dark:text-drive-200">
+        <h1 class="sm:text-3xl text-xl font-bold text-drive-700 dark:text-drive-200">
           Welcome back, {{ username }}
         </h1>
 
         <div class="sm:w-[calc(100vw-5rem)] w-[calc(100vw-2rem)] lg:w-[65vw]">
           <div class="grid grid-cols-2">
-            <p>{{ storage }}GB</p>
-            <p class="text-end">{{ driveStorage }}GB</p>
+            <p class="sm:text-lg text-sm">{{ storage }}GB</p>
+            <p class="text-end sm:text-lg text-sm">{{ driveStorage }}GB</p>
           </div>
-          <div class="bg-gray-200 rounded-full h-8 overflow-hidden">
+          <div class="bg-gray-200 rounded-full sm:h-8 h-5 overflow-hidden">
             <div
               class="bg-drive-700 flex items-center h-full"
               :style="{ width: percentageUsed + '%' }"
             >
-              <p class="text-xl ml-3 text-white drop-shadow-lg">
+              <p class="ml-3 text-white drop-shadow-lg sm:text-xl">
                 {{ percentageUsed }}%
               </p>
             </div>
@@ -86,10 +86,10 @@ onMounted(() => {
             You have used {{ storage }}GB of your {{ driveStorage }}GB storage
           </p>
         </div>
-        <div class="text-3xl mt-8">
+        <div class="sm:text-3xl text-xl mt-8">
           <h1>Overall stats</h1>
         </div>
-        <div class="text-left mt-2">
+        <div class="text-left text-sm sm:text-lg mt-2">
           <h2>Requests: {{ allRequests.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</h2>
           <h2>
             Storage used:
