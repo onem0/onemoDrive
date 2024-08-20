@@ -127,7 +127,7 @@ onMounted(() => {
             No files found
           </h1>
           <p class="mt-6 text-base leading-7 text-gray-600">
-            Sorry, we couldn’t find any files in this folder.
+            We couldn’t find any files in this folder.
           </p>
         </div>
       </div>
