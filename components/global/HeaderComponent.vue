@@ -1,5 +1,9 @@
 <template>
-  <Disclosure as="nav" class="bg-white shadow text-black dark:bg-neutral-900 dark:text-neutral-300" v-slot="{ open }">
+  <Disclosure
+    as="nav"
+    class="bg-white shadow text-black dark:bg-black dark:text-neutral-300"
+    v-slot="{ open }"
+  >
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -26,30 +30,38 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             <!-- Current: "border-drive-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-             <RouterLink
+            <RouterLink
               to="/files"
               class="mt-5 border-b-2"
               :class="{
-                'border-drive-500 text-gray-900 dark:text-neutral-300': page.drive,
-                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.drive,
+                'border-drive-500 text-gray-900 dark:text-neutral-300':
+                  page.drive,
+                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                  !page.drive,
               }"
-              >Drive</RouterLink>
+              >Drive</RouterLink
+            >
             <RouterLink
               to="/shared"
               class="mt-5 border-b-2"
               :class="{
-                'border-drive-500 text-gray-900 dark:text-gray-600': page.shared,
-                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.shared,
+                'border-drive-500 text-gray-900 dark:text-gray-600':
+                  page.shared,
+                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                  !page.shared,
               }"
-              >Shared</RouterLink>
-              <RouterLink
+              >Shared</RouterLink
+            >
+            <RouterLink
               to="/stats"
               class="mt-5 border-b-2"
               :class="{
                 'border-drive-500 text-gray-900 dark:text-gray-600': page.stats,
-                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': !page.stats,
+                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                  !page.stats,
               }"
-              >Your stats</RouterLink>
+              >Your stats</RouterLink
+            >
           </div>
         </div>
         <div
@@ -173,7 +185,6 @@ if (path.startsWith("/files")) {
   page.value.stats = true;
 }
 
-
 const router = useRouter();
 
 const account = ref(false);
@@ -190,7 +201,7 @@ onMounted(() => {
       account.value = true;
       username.value = result.username;
     } else {
-      router.push("/login")
+      router.push("/login");
     }
   });
 });

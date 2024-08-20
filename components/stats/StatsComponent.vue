@@ -58,9 +58,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen dark:text-neutral-300 dark:bg-black">
     <div v-if="loaded">
-      <div class="flex mt-5 flex-col items-center justify-center">
+      <div class="flex pt-5 flex-col items-center justify-center">
         <h1 class="text-3xl font-bold text-drive-700 dark:text-drive-200">
           Welcome back, {{ username }}
         </h1>

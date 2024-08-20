@@ -31,7 +31,8 @@ function deleteShared(file) {
 }
 
 function copyShared(file) {
-  const url = "https://driveapi.onemo.dev/shared/" + id.value + "/" + file.fullname
+  const url =
+    "https://driveapi.onemo.dev/shared/" + id.value + "/" + file.fullname;
 
   navigator.clipboard.writeText(url);
 }
@@ -90,7 +91,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="min-h-screen text-black dark:text-neutral-300">
+  <div class="min-h-screen text-black dark:text-neutral-300 dark:bg-black">
     <div v-if="!error">
       <div
         v-if="!requestFinished"
