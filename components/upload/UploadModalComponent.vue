@@ -141,9 +141,18 @@ function closeModal() {
   }
 }
 
+onMounted(() => {
+  window.addEventListener("beforeunload", (event) => {
+    if (uploadInProgress.value) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+});
+
 function uploadFile() {
   const file = document.querySelector('input[type="file"]').files[0];
-  const chunkSize = 5 * 1024 * 1024; 
+  const chunkSize = 5 * 1024 * 1024;
   const totalChunks = Math.ceil(file.size / chunkSize);
 
   const uploadChunk = async (chunkIndex) => {
@@ -172,12 +181,10 @@ function uploadFile() {
           onUploadProgress: (progressEvent) => {
             uploadInProgress.value = true;
 
-            // Fortschritt des aktuellen Chunks berechnen
             const chunkProgress = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
 
-            // Gesamtfortschritt berechnen
             const percentCompleted = Math.round(
               ((chunkIndex + chunkProgress / 100) * 100) / totalChunks
             );
@@ -192,6 +199,7 @@ function uploadFile() {
         response.data.message === "file uploaded and merged successfully"
       ) {
         changeModal(false);
+        uploadInProgress.value = false;
         router.go();
       } else if (chunkIndex < totalChunks - 1) {
         uploadChunk(chunkIndex + 1); // Nächsten Chunk hochladen
