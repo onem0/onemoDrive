@@ -18,6 +18,8 @@ const path = ref(props.path.file);
 
 const link = ref("");
 
+const clickedShare = ref(false);
+
 const show = ref(false);
 
 function copyLink() {
@@ -26,7 +28,9 @@ function copyLink() {
 }
 
 function startShare() {
-  axios
+  if(!clickedShare.value) {
+    clickedShare.value = true;
+    axios
     .post(
       "https://driveapi.onemo.dev/startShare",
       {},
@@ -45,6 +49,7 @@ function startShare() {
       console.log(error);
       alert("An error occurred while starting the share.");
     });
+  }
 }
 </script>
 
