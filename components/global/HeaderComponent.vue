@@ -25,7 +25,7 @@
               class="h-8 w-auto cursor-pointer"
               :src="imageBase64"
               alt="onemo Drive"
-              @click="router.push('/')"
+              @click="router.push('/files')"
             />
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
