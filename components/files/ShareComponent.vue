@@ -39,7 +39,7 @@ function startShare() {
     )
     .then((response) => {
       show.value = true;
-      link.value = response.data.fileURL;
+      link.value = response.data.fileURL.replaceAll(" ", "%20");
     })
     .catch((error) => {
       console.log(error);
