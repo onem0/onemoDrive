@@ -208,6 +208,7 @@ function uploadFile() {
     } catch (error) {
       changeModal(false);
       console.log(error);
+      uploadInProgress.value = false;
       alert("An error occurred while uploading the file.");
     }
   };
