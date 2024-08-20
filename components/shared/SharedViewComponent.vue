@@ -30,6 +30,10 @@ function deleteShared(file) {
     });
 }
 
+function openImage(file) {
+  window.open("https://driveapi.onemo.dev/shared/" + id.value + "/" + file.fullname)
+}
+
 function copyShared(file) {
   const url =
     "https://driveapi.onemo.dev/shared/" + id.value + "/" + file.fullname;
