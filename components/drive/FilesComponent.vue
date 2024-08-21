@@ -6,6 +6,7 @@ import { FolderIcon, DocumentIcon } from "@heroicons/vue/24/outline";
 
 const router = useRouter();
 
+const folders = ref([]);
 const files = ref([]);
 
 const path = defineProps(["file"]);
@@ -41,6 +42,7 @@ onMounted(() => {
         let folder = false;
         let image = false;
         let video = false;
+        let base64 = "";
 
         if (response.data.files[i].includes("-folder")) {
           folder = true;
@@ -62,9 +64,24 @@ onMounted(() => {
             Cookies.get("token") +
             "&size=small";
 
-          axios.get(url).then((response) => {
-            files.value[i].base64 = response.data.base64;
+          files.value.push({
+            name: response.data.files[i],
+            folder: folder,
+            image: image,
+            video: video,
+            base64: base64, 
+            loaded: false,
           });
+          const currentFile = files.value[files.value.length - 1];
+          axios
+            .get(url)
+            .then((response) => {
+              currentFile.base64 = response.data.base64;
+            })
+            .catch((error) => {
+              console.error("Fehler beim Laden der Datei:", error);
+              currentFile.loaded = false;
+            });
         }
 
         if (
@@ -77,14 +94,21 @@ onMounted(() => {
           video = true;
         }
 
-        files.value.push({
-          name: response.data.files[i].replace("-folder", ""),
-          folder: folder,
-          image: image,
-          video: video,
-          base64: "",
-          loaded: false,
-        });
+        if (folder) {
+          folders.value.push({
+            name: response.data.files[i].replace("-folder", ""),
+            folder: folder,
+          });
+        } else if (!image) {
+          files.value.push({
+            name: response.data.files[i],
+            folder: folder,
+            image: image,
+            video: video,
+            base64: base64,
+            loaded: false,
+          });
+        }
       }
     })
     .catch((e) => {
@@ -126,7 +150,7 @@ onMounted(() => {
           />
         </svg>
       </div>
-      <div v-if="files.length == 0 && requestFinished">
+      <div v-if="files.length == 0 && folders.length == 0 && requestFinished">
         <div class="text-center mt-5">
           <p class="text-base font-semibold text-drive-500">No files</p>
           <h1
@@ -140,73 +164,104 @@ onMounted(() => {
         </div>
       </div>
       <div v-else>
+        <div v-if="folders.length > 0">
+          <p class="ml-2 text-neutral-500">Folders</p>
+          <div
+            class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-cols-1"
+          >
+            <div v-for="file in folders" :key="file">
+              <div
+                class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
+              >
+                <div class="text-center">
+                  <div>
+                    <div
+                      v-if="file.folder"
+                      class="flex align-center items-center justify-center"
+                      @click="open(file)"
+                    >
+                      <FolderIcon class="h-12 w-12 text-gray-500 m-2" />
+                    </div>
+                    <p class="mb-5 mt-4 truncate" @click="open(file)">
+                      {{ file.name }}
+                    </p>
+                  </div>
+                  <div class="flex justify-center">
+                    <FilesDeleteComponent :file="file" :path="path" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div
-          class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          v-if="files.length > 0"
+          :class="{
+            'mt-4': folders.length > 0,
+          }"
         >
-          <div v-for="file in files" :key="file">
-            <div
-              class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
-            >
-              <div class="text-center">
-                <div>
-                  <div v-if="file.image" class="items-center">
-                    <div class="flex align-center items-center justify-center">
-                      <img
-                        :src="file.base64"
-                        v-show="file.loaded"
+          <p class="ml-2 text-neutral-500">Files</p>
+          <div
+            class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-cols-1"
+          >
+            <div v-for="file in files" :key="file">
+              <div
+                class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
+              >
+                <div class="text-center">
+                  <div>
+                    <div v-if="file.image" class="items-center">
+                      <div
+                        class="flex align-center items-center justify-center"
+                      >
+                        <img
+                          :src="file.base64"
+                          v-show="file.loaded"
+                          class="object-cover rounded-lg"
+                          @load="file.loaded = true"
+                          @click="openImage(file)"
+                        />
+                      </div>
+                      <div
+                        v-if="!file.loaded"
+                        class="flex align-center items-center justify-center"
+                      >
+                        <div
+                          class="h-40 w-full object-cover rounded-lg loader"
+                        ></div>
+                      </div>
+                    </div>
+                    <div
+                      v-if="file.video"
+                      class="flex align-center items-center justify-center"
+                    >
+                      <video
                         class="object-cover rounded-lg"
-                        @load="file.loaded = true"
-                        @click="openImage(file)"
+                        controls
+                        height="100%"
+                        width="100%"
+                        :src="
+                          'https://driveapi.onemo.dev/download/' +
+                          path.file +
+                          '/' +
+                          file.name +
+                          '?token=' +
+                          Cookies.get('token')
+                        "
                       />
                     </div>
                     <div
-                      v-if="!file.loaded"
+                      v-else-if="!file.image && !file.video"
                       class="flex align-center items-center justify-center"
                     >
-                      <div
-                        class="h-40 w-full object-cover rounded-lg loader"
-                      ></div>
+                      <DocumentIcon class="h-12 w-12 text-gray-500 m-2" />
                     </div>
+                    <p class="mb-5 mt-4 truncate" @click="open(file)">
+                      {{ file.name }}
+                    </p>
                   </div>
-                  <div
-                    v-if="file.video"
-                    class="flex align-center items-center justify-center"
-                  >
-                    <video
-                      class="object-cover rounded-lg"
-                      controls
-                      height="100%"
-                      width="100%"
-                      :src="
-                        'https://driveapi.onemo.dev/download/' +
-                        path.file +
-                        '/' +
-                        file.name +
-                        '?token=' +
-                        Cookies.get('token')
-                      "
-                    />
-                  </div>
-                  <div
-                    v-if="file.folder"
-                    class="flex align-center items-center justify-center"
-                    @click="open(file)"
-                  >
-                    <FolderIcon class="h-12 w-12 text-gray-500 m-2" />
-                  </div>
-                  <div
-                    v-else-if="!file.image && !file.video"
-                    class="flex align-center items-center justify-center"
-                  >
-                    <DocumentIcon class="h-12 w-12 text-gray-500 m-2" />
-                  </div>
-                  <p class="mb-5 mt-4 truncate" @click="open(file)">
-                    {{ file.name }}
-                  </p>
-                </div>
-                <div class="flex justify-center">
-                  <FilesDeleteComponent :file="file" :path="path" />
-                  <div v-if="!file.folder">
+                  <div class="flex justify-center">
+                    <FilesDeleteComponent :file="file" :path="path" />
                     <FilesShareComponent :file="file" :path="path" />
                   </div>
                 </div>
