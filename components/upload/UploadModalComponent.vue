@@ -202,13 +202,7 @@ function uploadFile() {
               ((chunkIndex + chunkProgress / 100) * 100) / totalChunks
             );
 
-            const elapsedTime = Date.now() - startTime;
-
-            const estimatedTime = elapsedTime / (percentCompleted / 100);
-
-            const remainingTime = estimatedTime - elapsedTime;
-
-            estimatedTimeLeft.value = (remainingTime / 1000).toFixed(1);
+            calcTime(startTime, true);
 
             progress.value = percentCompleted;
           },
@@ -222,6 +216,7 @@ function uploadFile() {
         changeModal(false);
         uploadInProgress.value = false;
         router.go();
+        calcTime(startTime, false);
       } else if (chunkIndex < totalChunks - 1) {
         uploadChunk(chunkIndex + 1);
       }
@@ -234,6 +229,35 @@ function uploadFile() {
   };
 
   uploadChunk(0);
+}
+
+let started = false;
+let startTime = 0;
+
+function calcTime(start, value) {
+  if (value && started) {
+    return;
+  }
+
+  console.log(value);
+
+  startTime = start;
+  started = true;
+
+  const interval = setInterval(() => {
+    const elapsedTime = Date.now() - startTime;
+
+    const estimatedTime = elapsedTime / (progress.value / 100);
+
+    const remainingTime = estimatedTime - elapsedTime;
+
+    estimatedTimeLeft.value = (remainingTime / 1000).toFixed(0);
+  }, 250);
+
+  if (!value) {
+    started = false;
+    clearInterval(interval);
+  }
 }
 </script>
 
