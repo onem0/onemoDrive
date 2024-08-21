@@ -13,7 +13,7 @@ const allStats = ref([]);
 
 const username = ref("");
 
-const allRequests = ref({ value: -1000 });
+const allRequests = ref({ value: 0 });
 
 const loaded = ref(false);
 
