@@ -89,8 +89,16 @@
                 <div v-if="progress === 0 && uploadInProgress" class="mt-5">
                   <p class="text-gray-500">Prepairing upload...</p>
                 </div>
-                <div v-if="progress === 100 && uploadInProgress" class="mt-5">
+                <div
+                  v-else-if="progress === 100 && uploadInProgress"
+                  class="mt-5"
+                >
                   <p class="text-gray-500">Processing Upload</p>
+                </div>
+                <div v-else-if="progress > 0 && progress < 100" class="mt-5">
+                  <p class="text-gray-500">
+                    Estimated time left: {{ estimatedTimeLeft }} seconds
+                  </p>
                 </div>
                 <div
                   v-if="uploadInProgress"
@@ -136,6 +144,8 @@ const router = useRouter();
 const progress = ref(0);
 const uploadInProgress = ref(false);
 
+const estimatedTimeLeft = ref(0);
+
 function closeModal() {
   if (!uploadInProgress.value) {
     changeModal(false);
@@ -152,6 +162,8 @@ onMounted(() => {
 });
 
 function uploadFile() {
+  const startTime = Date.now();
+
   const file = document.querySelector('input[type="file"]').files[0];
   const chunkSize = 5 * 1024 * 1024;
   const totalChunks = Math.ceil(file.size / chunkSize);
@@ -190,6 +202,14 @@ function uploadFile() {
               ((chunkIndex + chunkProgress / 100) * 100) / totalChunks
             );
 
+            const elapsedTime = Date.now() - startTime;
+
+            const estimatedTime = elapsedTime / (percentCompleted / 100);
+
+            const remainingTime = estimatedTime - elapsedTime;
+
+            estimatedTimeLeft.value = (remainingTime / 1000).toFixed(1);
+
             progress.value = percentCompleted;
           },
         }
@@ -203,7 +223,7 @@ function uploadFile() {
         uploadInProgress.value = false;
         router.go();
       } else if (chunkIndex < totalChunks - 1) {
-        uploadChunk(chunkIndex + 1); // Nächsten Chunk hochladen
+        uploadChunk(chunkIndex + 1);
       }
     } catch (error) {
       changeModal(false);
@@ -213,7 +233,7 @@ function uploadFile() {
     }
   };
 
-  uploadChunk(0); // Upload startet mit dem ersten Chunk
+  uploadChunk(0);
 }
 </script>
 
