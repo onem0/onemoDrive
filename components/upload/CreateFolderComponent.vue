@@ -41,7 +41,7 @@
                   <DialogTitle
                     as="h3"
                     class="text-base font-semibold leading-6 text-gray-900"
-                    >Upload file</DialogTitle
+                    >Create Folder</DialogTitle
                   >
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
