@@ -69,7 +69,7 @@ onMounted(() => {
             folder: folder,
             image: image,
             video: video,
-            base64: base64, 
+            base64: base64,
             loaded: false,
           });
           const currentFile = files.value[files.value.length - 1];
@@ -116,6 +116,46 @@ onMounted(() => {
       error.value = true;
     });
 });
+
+const drag = ref(false);
+
+function drop(folder, event) {
+  const file = JSON.parse(event.dataTransfer.getData("file"));
+  const currentPath = path.file;
+  axios
+    .post("https://driveapi.onemo.dev/moveFile", {
+      token: Cookies.get("token"),
+      oldpath: currentPath.replace("/", "") + file.name,
+      newpath:
+        path.file.replace("/", "") + folder.name + "-folder/" + file.name,
+    })
+    .then(() => {
+      router.go()
+    })
+}
+
+function folderBack(event) {
+  const file = JSON.parse(event.dataTransfer.getData("file"));
+  const currentPath = path.file;
+  axios
+    .post("https://driveapi.onemo.dev/moveFile", {
+      token: Cookies.get("token"),
+      oldpath: currentPath.replace("/", "") + file.name,
+      newpath: currentPath.replace("/", "").split("/").slice(0, -2).join("/") + "/" + file.name
+    })
+    .then(() => {
+      router.go()
+    })
+}
+
+function dragOver(event) {
+  event.preventDefault();
+}
+
+function dragStart(file) {
+  event.dataTransfer.setData("file", JSON.stringify(file));
+  drag.value = true;
+}
 </script>
 <template>
   <div class="min-h-screen text-black dark:text-neutral-300">
@@ -123,6 +163,18 @@ onMounted(() => {
     <DriveStructureComponent :path="path" />
     <div class="flex justify-end mr-1 mb-2 mt-2">
       <DriveUploadComponent :path="path" />
+    </div>
+    <div class="flex justify-center mb-2">
+      <div
+        class="flex w-[calc(100vw-2rem)] h-0 transition-all duration-300 border-2 border-dotted opacity-0 border-neutral-500 items-center justify-center rounded-lg"
+        :class="{
+          'h-20 opacity-100': drag && path.file !== '/',
+        }"
+        v-on:dragover="dragOver"
+        v-on:drop="folderBack($event)"
+      >
+        <p>Drop here to go back</p>
+      </div>
     </div>
     <div v-if="!error">
       <div
@@ -173,7 +225,11 @@ onMounted(() => {
               <div
                 class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
               >
-                <div class="text-center">
+                <div
+                  v-on:dragover="dragOver"
+                  v-on:drop="drop(file, $event)"
+                  class="text-center"
+                >
                   <div>
                     <div
                       v-if="file.folder"
@@ -206,7 +262,10 @@ onMounted(() => {
           >
             <div v-for="file in files" :key="file">
               <div
-                class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
+                draggable="true"
+                v-on:dragstart="dragStart(file)"
+                v-on:dragend="drag = false"
+                class="drag p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
               >
                 <div class="text-center">
                   <div>
