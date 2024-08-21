@@ -315,7 +315,7 @@ function dragStart(file) {
                     >
                       <DocumentIcon class="h-12 w-12 text-gray-500 m-2" />
                     </div>
-                    <p class="mb-5 mt-4 truncate" @click="open(file)">
+                    <p class="mb-5 mt-4 truncate select-none" @click="open(file)">
                       {{ file.name }}
                     </p>
                   </div>
