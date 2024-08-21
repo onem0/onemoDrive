@@ -100,8 +100,10 @@
                     Estimated time left: {{ estimatedTimeLeft }} seconds
                   </p>
                 </div>
+                <div v-else-if="!uploadInProgress" class="mt-5">
+                  <p class="text-gray-500">Upload not started...</p>
+                </div>
                 <div
-                  v-if="uploadInProgress"
                   class="mt-5 w-full bg-gray-100 overflow-hidden rounded-lg h-5"
                 >
                   <div
@@ -111,7 +113,7 @@
                   ></div>
 
                   <div
-                    v-if="progress === 0 || progress === 100"
+                    v-if="(progress === 0 || progress === 100) && uploadInProgress"
                     class="h-full bg-gray-400 animation"
                   ></div>
                 </div>
