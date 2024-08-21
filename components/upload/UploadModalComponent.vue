@@ -239,8 +239,6 @@ function calcTime(start, value) {
     return;
   }
 
-  console.log(value);
-
   startTime = start;
   started = true;
 
@@ -251,8 +249,22 @@ function calcTime(start, value) {
 
     const remainingTime = estimatedTime - elapsedTime;
 
-    estimatedTimeLeft.value = (remainingTime / 1000).toFixed(0);
-  }, 250);
+    const remainingSeconds = (remainingTime / 1000).toFixed(0)
+
+    const minutes = Math.floor(remainingSeconds / 60);
+
+    function getSeconds () {
+      if (remainingSeconds % 60 < 10) {
+        return "0" + remainingSeconds % 60;
+      }
+
+      return remainingSeconds % 60;
+    }
+
+    const seconds = getSeconds();
+
+    estimatedTimeLeft.value = minutes + ":" + seconds;
+  }, 500);
 
   if (!value) {
     started = false;
