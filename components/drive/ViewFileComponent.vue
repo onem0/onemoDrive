@@ -37,7 +37,8 @@ const path = defineProps(["file"]);
     :style="{ backgroundColor: bgColor }"
   >
     <img
-      class="max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)] shadow-2xl transition-all duration-long ease rounded-lg"
+      class="max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)] shadow-2xl rounded-lg"
+      v-show="loaded"
       :class="{
         'opacity-0 blur-3xl': !loaded,
         'opacity-100 blur-none': loaded,
@@ -50,6 +51,10 @@ const path = defineProps(["file"]);
       "
       @load="loaded = true"
     />
+
+    <div v-show="!loaded" class="text-white">
+      Loading...
+    </div>
   </div>
 </template>
 

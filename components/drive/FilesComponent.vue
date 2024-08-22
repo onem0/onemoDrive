@@ -276,7 +276,7 @@ function dragStart(file) {
                         <img
                           :src="file.base64"
                           v-show="file.loaded"
-                          class="object-cover rounded-lg"
+                          class="object-cover rounded-lg h-64 w-full"
                           @load="file.loaded = true"
                           @click="openImage(file)"
                         />
@@ -286,7 +286,7 @@ function dragStart(file) {
                         class="flex align-center items-center justify-center"
                       >
                         <div
-                          class="h-40 w-full object-cover rounded-lg loader"
+                          class="h-64 w-full object-cover rounded-lg loader"
                         ></div>
                       </div>
                     </div>
