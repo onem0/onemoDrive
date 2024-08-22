@@ -113,7 +113,9 @@
                   ></div>
 
                   <div
-                    v-if="(progress === 0 || progress === 100) && uploadInProgress"
+                    v-if="
+                      (progress === 0 || progress === 100) && uploadInProgress
+                    "
                     class="h-full bg-gray-400 animation"
                   ></div>
                 </div>
@@ -164,95 +166,96 @@ onMounted(() => {
 });
 
 function uploadFile() {
-  const startTime = Date.now();
+  if (!uploadInProgress.value) {
+    const startTime = Date.now();
 
-  const file = document.querySelector('input[type="file"]').files[0];
-  const chunkSize = 5 * 1024 * 1024;
-  const totalChunks = Math.ceil(file.size / chunkSize);
+    const file = document.querySelector('input[type="file"]').files[0];
+    const chunkSize = 5 * 1024 * 1024;
+    const totalChunks = Math.ceil(file.size / chunkSize);
 
-  const uploadChunk = async (chunkIndex) => {
-    const start = chunkIndex * chunkSize;
-    const end = Math.min(file.size, start + chunkSize);
+    const uploadChunk = async (chunkIndex) => {
+      const start = chunkIndex * chunkSize;
+      const end = Math.min(file.size, start + chunkSize);
 
-    const chunk = file.slice(start, end);
-    const formData = new FormData();
-    formData.append("file", chunk);
+      const chunk = file.slice(start, end);
+      const formData = new FormData();
+      formData.append("file", chunk);
 
-    try {
-      const response = await axios.post(
-        "https://driveapi.onemo.dev/upload",
-        formData,
-        {
-          headers: {
-            token: Cookie.get("token"),
-            path:
-              window.location.pathname
-                .replace("/files", "")
-                .replaceAll("%20", " ") + "/",
-            "chunk-index": chunkIndex,
-            "total-chunks": totalChunks,
-            "original-file-name": file.name,
-          },
-          onUploadProgress: (progressEvent) => {
-            uploadInProgress.value = true;
+      try {
+        const response = await axios.post(
+          "https://driveapi.onemo.dev/upload",
+          formData,
+          {
+            headers: {
+              token: Cookie.get("token"),
+              path:
+                window.location.pathname
+                  .replace("/files", "")
+                  .replaceAll("%20", " ") + "/",
+              "chunk-index": chunkIndex,
+              "total-chunks": totalChunks,
+              "original-file-name": file.name,
+            },
+            onUploadProgress: (progressEvent) => {
+              uploadInProgress.value = true;
 
-            const chunkProgress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
+              const chunkProgress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
 
-            const percentCompleted = Math.round(
-              ((chunkIndex + chunkProgress / 100) * 100) / totalChunks
-            );
+              const percentCompleted = Math.round(
+                ((chunkIndex + chunkProgress / 100) * 100) / totalChunks
+              );
 
-            const elapsedTime = Date.now() - startTime;
+              const elapsedTime = Date.now() - startTime;
 
-            const estimatedTime = elapsedTime / (percentCompleted / 100);
+              const estimatedTime = elapsedTime / (percentCompleted / 100);
 
-            const remainingTime = estimatedTime - elapsedTime;
+              const remainingTime = estimatedTime - elapsedTime;
 
-            const remainingSeconds = (remainingTime / 1000).toFixed(0);
+              const remainingSeconds = (remainingTime / 1000).toFixed(0);
 
-            const minutes = Math.floor(remainingSeconds / 60);
+              const minutes = Math.floor(remainingSeconds / 60);
 
-            function getSeconds() {
-              if (remainingSeconds % 60 < 10) {
-                return "0" + (remainingSeconds % 60);
+              function getSeconds() {
+                if (remainingSeconds % 60 < 10) {
+                  return "0" + (remainingSeconds % 60);
+                }
+
+                return remainingSeconds % 60;
               }
 
-              return remainingSeconds % 60;
-            }
+              const seconds = getSeconds();
 
-            const seconds = getSeconds();
+              estimatedTimeLeft.value = minutes + ":" + seconds;
 
-            
-            estimatedTimeLeft.value = minutes + ":" + seconds;
-            
-            const currentValue = estimatedTimeLeft.value;
-            
-            progress.value = percentCompleted;
-          },
+              const currentValue = estimatedTimeLeft.value;
+
+              progress.value = percentCompleted;
+            },
+          }
+        );
+
+        if (
+          chunkIndex === totalChunks - 1 &&
+          response.data.message === "file uploaded and merged successfully"
+        ) {
+          changeModal(false);
+          uploadInProgress.value = false;
+          router.go();
+        } else if (chunkIndex < totalChunks - 1) {
+          uploadChunk(chunkIndex + 1);
         }
-      );
-
-      if (
-        chunkIndex === totalChunks - 1 &&
-        response.data.message === "file uploaded and merged successfully"
-      ) {
+      } catch (error) {
         changeModal(false);
+        console.log(error);
         uploadInProgress.value = false;
-        router.go();
-      } else if (chunkIndex < totalChunks - 1) {
-        uploadChunk(chunkIndex + 1);
+        alert("An error occurred while uploading the file.");
       }
-    } catch (error) {
-      changeModal(false);
-      console.log(error);
-      uploadInProgress.value = false;
-      alert("An error occurred while uploading the file.");
-    }
-  };
+    };
 
-  uploadChunk(0);
+    uploadChunk(0);
+  }
 }
 </script>
 
