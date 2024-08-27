@@ -97,7 +97,7 @@
                 </div>
                 <div v-else-if="progress > 0 && progress < 100" class="mt-5">
                   <p class="text-gray-500">
-                    Estimated time left: {{ estimatedTimeLeft }} seconds
+                    Estimated time left: {{ estimatedTimeSmooth }}
                   </p>
                 </div>
                 <div v-else-if="!uploadInProgress" class="mt-5">
@@ -146,6 +146,9 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const progress = ref(0);
+
+const estimatedTimeSmooth = ref(0)
+
 const uploadInProgress = ref(false);
 
 const estimatedTimeLeft = ref(0);
@@ -155,6 +158,10 @@ function closeModal() {
     changeModal(false);
   }
 }
+
+watch(() => progress.value, (value) => {
+  estimatedTimeSmooth.value = estimatedTimeLeft.value;
+})
 
 onMounted(() => {
   window.addEventListener("beforeunload", (event) => {
@@ -228,8 +235,6 @@ function uploadFile() {
               const seconds = getSeconds();
 
               estimatedTimeLeft.value = minutes + ":" + seconds;
-
-              const currentValue = estimatedTimeLeft.value;
 
               progress.value = percentCompleted;
             },
