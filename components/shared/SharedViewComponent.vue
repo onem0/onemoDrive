@@ -36,7 +36,7 @@ function openImage(file) {
 
 function copyShared(file) {
   const url =
-    "https://driveapi.onemo.dev/shared/" + id.value + "/" + file.fullname;
+    "https://driveapi.onemo.dev/shared/" + id.value + "/" + file.fullname.replaceAll(" ", "%20");
 
   navigator.clipboard.writeText(url);
 }

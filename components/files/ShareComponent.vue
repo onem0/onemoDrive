@@ -24,7 +24,7 @@ const show = ref(false);
 
 function copyLink() {
   console.log(link.value);
-  navigator.clipboard.writeText(link.value);
+  navigator.clipboard.writeText(link.value.replaceAll(" ", "%20"));
 }
 
 function startShare() {
