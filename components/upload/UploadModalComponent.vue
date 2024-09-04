@@ -177,7 +177,7 @@ function uploadFile() {
     const startTime = Date.now();
 
     const file = document.querySelector('input[type="file"]').files[0];
-    const chunkSize = 5 * 1024 * 1024;
+    const chunkSize = 1 * 1024 * 1024;
     const totalChunks = Math.ceil(file.size / chunkSize);
 
     const uploadChunk = async (chunkIndex) => {
