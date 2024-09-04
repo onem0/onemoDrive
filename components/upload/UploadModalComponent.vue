@@ -252,7 +252,9 @@ function uploadFile() {
           uploadChunk(chunkIndex + 1);
         }
       } catch (error) {
-        uploadChunk(chunkIndex);
+        setTimeout(() => {
+          uploadChunk(chunkIndex);
+        }, 500)
       }
     };
 
