@@ -159,7 +159,6 @@ function dragStart(file) {
 </script>
 <template>
   <div class="min-h-screen text-black dark:text-neutral-300">
-    <InformationBannerComponent />
     <DriveStructureComponent :path="path" />
     <div class="flex justify-end mr-1 mb-2 mt-2">
       <DriveUploadComponent :path="path" />

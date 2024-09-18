@@ -1,6 +1,5 @@
 <template>
 <HeaderComponent />
-<InformationBannerComponent />
 <SharedViewComponent />
 <FooterComponent />
 </template>

@@ -3,7 +3,6 @@
 
 <template>
   <HeaderComponent />
-  <InformationBannerComponent />
   <StatsComponent />
   <FooterComponent />
 </template>
