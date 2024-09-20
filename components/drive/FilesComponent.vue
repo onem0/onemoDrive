@@ -15,6 +15,10 @@ const error = ref(false);
 
 const requestFinished = ref(false);
 
+import { defineComponent } from 'vue'
+import { VideoPlayer } from '@videojs-player/vue'
+import 'video.js/dist/video-js.css'
+
 function open(file) {
   if (file.folder) {
     router.push("/files" + path.file + file.name + "-folder");
@@ -168,45 +172,21 @@ function dragStart(file) {
         class="flex w-[calc(100vw-2rem)] h-0 transition-all duration-300 border-2 border-dotted opacity-0 border-neutral-500 items-center justify-center rounded-lg"
         :class="{
           'h-20 opacity-100': drag && path.file !== '/',
-        }"
-        v-on:dragover="dragOver"
-        v-on:drop="folderBack($event)"
-      >
+        }" v-on:dragover="dragOver" v-on:drop="folderBack($event)">
         <p>Drop here to go back</p>
       </div>
     </div>
     <div v-if="!error">
-      <div
-        v-if="!requestFinished"
-        class="flex justify-center items-center h-screen"
-      >
+      <div v-if="!requestFinished" class="flex justify-center items-center h-screen">
         <svg class="circleLoader" viewBox="0 0 40 40" height="40" width="40">
-          <circle
-            class="track"
-            cx="20"
-            cy="20"
-            r="17.5"
-            pathlength="100"
-            stroke-width="5px"
-            fill="none"
-          />
-          <circle
-            class="car"
-            cx="20"
-            cy="20"
-            r="17.5"
-            pathlength="100"
-            stroke-width="5px"
-            fill="none"
-          />
+          <circle class="track" cx="20" cy="20" r="17.5" pathlength="100" stroke-width="5px" fill="none" />
+          <circle class="car" cx="20" cy="20" r="17.5" pathlength="100" stroke-width="5px" fill="none" />
         </svg>
       </div>
       <div v-if="files.length == 0 && folders.length == 0 && requestFinished">
         <div class="text-center mt-5">
           <p class="text-base font-semibold text-drive-500">No files</p>
-          <h1
-            class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl"
-          >
+          <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             No files found
           </h1>
           <p class="mt-6 text-base leading-7 text-gray-600">
@@ -217,24 +197,13 @@ function dragStart(file) {
       <div v-else>
         <div v-if="folders.length > 0">
           <p class="ml-2 text-neutral-500">Folders</p>
-          <div
-            class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-cols-1"
-          >
+          <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-cols-1">
             <div v-for="file in folders" :key="file">
               <div
-                class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
-              >
-                <div
-                  v-on:dragover="dragOver"
-                  v-on:drop="drop(file, $event)"
-                  class="text-center"
-                >
+                class="p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500">
+                <div v-on:dragover="dragOver" v-on:drop="drop(file, $event)" class="text-center">
                   <div>
-                    <div
-                      v-if="file.folder"
-                      class="flex align-center items-center justify-center"
-                      @click="open(file)"
-                    >
+                    <div v-if="file.folder" class="flex align-center items-center justify-center" @click="open(file)">
                       <FolderIcon class="h-12 w-12 text-gray-500 m-2" />
                     </div>
                     <p class="mb-5 mt-4 truncate" @click="open(file)">
@@ -249,69 +218,42 @@ function dragStart(file) {
             </div>
           </div>
         </div>
-        <div
-          v-if="files.length > 0"
-          :class="{
-            'mt-4': folders.length > 0,
-          }"
-        >
+        <div v-if="files.length > 0" :class="{
+          'mt-4': folders.length > 0,
+        }">
           <p class="ml-2 text-neutral-500">Files</p>
-          <div
-            class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-cols-1"
-          >
+          <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-cols-1">
             <div v-for="file in files" :key="file">
-              <div
-                draggable="true"
-                v-on:dragstart="dragStart(file)"
-                v-on:dragend="drag = false"
-                class="drag p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500"
-              >
+              <div draggable="true" v-on:dragstart="dragStart(file)" v-on:dragend="drag = false"
+                class="drag p-2 m-1 ml-1 sm:ml-1 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-md dark:shadow-neutral-600 items-center sm:w-auto cursor-pointer hover:shadow-none transition-shadow ease duration-500">
                 <div class="text-center">
                   <div>
                     <div v-if="file.image" class="items-center">
-                      <div
-                        class="flex align-center items-center justify-center"
-                      >
-                        <img
-                          :src="file.base64"
-                          v-show="file.loaded"
-                          class="object-cover rounded-lg h-64 w-full"
-                          @load="file.loaded = true"
-                          @click="openImage(file)"
-                        />
+                      <div class="flex align-center items-center justify-center">
+                        <img :src="file.base64" v-show="file.loaded" class="object-cover rounded-lg h-64 w-full"
+                          @load="file.loaded = true" @click="openImage(file)" />
                       </div>
-                      <div
-                        v-if="!file.loaded"
-                        class="flex align-center items-center justify-center"
-                      >
-                        <div
-                          class="h-64 w-full object-cover rounded-lg loader"
-                        ></div>
+                      <div v-if="!file.loaded" class="flex align-center items-center justify-center">
+                        <div class="h-64 w-full object-cover rounded-lg loader"></div>
                       </div>
                     </div>
-                    <div
-                      v-if="file.video"
-                      class="flex align-center items-center justify-center"
-                    >
-                      <video
-                        class="object-cover rounded-lg"
-                        controls
-                        height="100%"
-                        width="100%"
-                        :src="
-                          'https://driveapi.onemo.dev/download/' +
-                          path.file +
-                          '/' +
-                          file.name +
-                          '?token=' +
-                          Cookies.get('token')
-                        "
-                      />
+                    <div v-if="file.video" class="flex align-center items-center justify-center">
+                      <!-- <video class="object-cover rounded-lg" controls height="100%" width="100%" :src="'https://driveapi.onemo.dev/download/' +
+                        path.file +
+                        '/' +
+                        file.name +
+                        '?token=' +
+                        Cookies.get('token')
+                        " /> -->
+                      <video-player :src="'https://driveapi.onemo.dev/download/' +
+                        path.file +
+                        '/' +
+                        file.name +
+                        '?token=' +
+                        Cookies.get('token')
+                        " controls :loop="false" class="min-w-full h-64" :volume="0.6" />
                     </div>
-                    <div
-                      v-else-if="!file.image && !file.video"
-                      class="flex align-center items-center justify-center"
-                    >
+                    <div v-else-if="!file.image && !file.video" class="flex align-center items-center justify-center">
                       <DocumentIcon class="h-12 w-12 text-gray-500 m-2" />
                     </div>
                     <p class="mb-5 mt-4 truncate select-none" @click="open(file)">
@@ -379,10 +321,12 @@ function dragStart(file) {
       stroke-dasharray: 0, 150;
       stroke-dashoffset: 0;
     }
+
     50% {
       stroke-dasharray: 75, 150;
       stroke-dashoffset: -25;
     }
+
     100% {
       stroke-dashoffset: -100;
     }
@@ -400,13 +344,11 @@ function dragStart(file) {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(56, 56, 56, 0.8) 30%,
-      rgba(56, 56, 56, 0.8) 70%,
-      rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(56, 56, 56, 0.8) 30%,
+        rgba(56, 56, 56, 0.8) 70%,
+        rgba(255, 255, 255, 0) 100%);
     animation: loading 1.5s infinite;
   }
 }
@@ -454,10 +396,12 @@ function dragStart(file) {
       stroke-dasharray: 0, 150;
       stroke-dashoffset: 0;
     }
+
     50% {
       stroke-dasharray: 75, 150;
       stroke-dashoffset: -25;
     }
+
     100% {
       stroke-dashoffset: -100;
     }
@@ -475,13 +419,11 @@ function dragStart(file) {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(229, 229, 229, 0.8) 30%,
-      rgba(229, 229, 229, 0.8) 70%,
-      rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(229, 229, 229, 0.8) 30%,
+        rgba(229, 229, 229, 0.8) 70%,
+        rgba(255, 255, 255, 0) 100%);
     animation: loading 1.5s infinite;
   }
 }
@@ -490,6 +432,7 @@ function dragStart(file) {
   0% {
     left: -100%;
   }
+
   100% {
     left: 100%;
   }
