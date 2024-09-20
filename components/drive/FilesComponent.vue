@@ -238,13 +238,6 @@ function dragStart(file) {
                       </div>
                     </div>
                     <div v-if="file.video" class="flex align-center items-center justify-center">
-                      <!-- <video class="object-cover rounded-lg" controls height="100%" width="100%" :src="'https://driveapi.onemo.dev/download/' +
-                        path.file +
-                        '/' +
-                        file.name +
-                        '?token=' +
-                        Cookies.get('token')
-                        " /> -->
                       <video-player :src="'https://driveapi.onemo.dev/download/' +
                         path.file +
                         '/' +
